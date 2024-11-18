@@ -1,7 +1,7 @@
 class Slime extends MovableObject {
-  y = 297;
-  height = 170;
-  width = 170;
+  y = 357;
+  height = 80;
+  width = 80;
   currentImage = 0;
   IMAGES_WALKING = [
     "img/enemie_slime/slime_run-1.png",
