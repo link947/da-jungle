@@ -2,7 +2,6 @@ class Bats extends MovableObject {
   y = 0;
   height = 170;
   width = 170;
-  currentImage = 0;
   IMAGES_WALKING = [
     "img/bat/bat-1.png",
     "img/bat/bat-2.png",

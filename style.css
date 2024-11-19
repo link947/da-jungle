@@ -1,9 +1,25 @@
-body{
+@font-face {
+    font-family: "Pixelify Sans";
+    src: url(font/PixelifySans-VariableFont_wght.ttf);
+}
+
+* {
+    box-sizing: border-box;
+    font-family: "Pixelify Sans", sans-serif;
+}
+
+body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    background: url(img/design/bg_tile.png);
+    background-size: 64px;
+    color: #fff;
 }
 
-canvas{
-    background-color: #000;
+canvas {
+    image-rendering: pixelated;
+    border: 16px solid;
+    border-image: url(img/design/border-tile.png) 2 / 1 / 0 stretch;
 }

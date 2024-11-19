@@ -1,17 +1,11 @@
-class MovableObject {
-  img;
-  imgCache = {};
+class MovableObject extends DrawableObject {
   speed = 0.15;
   speedY = 0;
   acceleration = 2.6;
-  x = 0;
-  y = 0;
-  width = 50;
-  height = 50;
   offsetY = 0;
   energy = 100;
   isDeadState = false;
-  isHurtState = false; 
+  isHurtState = false;
   lastHit = 0;
 
   applyGravity() {
@@ -24,24 +18,11 @@ class MovableObject {
   }
 
   isAboveGround() {
-    return this.y <= 265;
-  }
-
-  loadImage(path) {
-    this.img = new Image();
-    this.img.src = path;
-  }
-
-  loadImages(arr) {
-    arr.forEach((path) => {
-      let img = new Image();
-      img.src = path;
-      this.imgCache[path] = img;
-    });
-  }
-
-  getImageFromCache(path) {
-    return this.imgCache[path];
+    if (this instanceof ThrowableObject) {
+      return true;
+    } else {
+      return this.y <= 265;
+    }
   }
 
   moveRight() {
@@ -59,26 +40,6 @@ class MovableObject {
     this.currentImage++;
   }
 
-  draw(ctx) {
-    if (this.img) {
-      ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
-    }
-  }
-
-  drawFrame(ctx) {
-    if (
-      this instanceof Character ||
-      this instanceof Slime ||
-      this instanceof Endboss
-    ) {
-      ctx.beginPath();
-      ctx.lineWidth = "5";
-      ctx.strokeStyle = "blue";
-      ctx.rect(this.x, this.y, this.width, this.height);
-      ctx.stroke();
-    }
-  }
-
   isColliding(mo) {
     return (
       this.x + this.width > mo.x &&
@@ -92,20 +53,20 @@ class MovableObject {
     this.energy -= 5;
 
     if (this.energy < 0) {
-        this.energy = 0;
+      this.energy = 0;
     } else {
-        this.lastHit = new Date().getTime();
+      this.lastHit = new Date().getTime();
     }
 
     if (this.energy === 0) {
-        this.isDeadState = true;
-        this.handleDeathAnimation();
+      this.isDeadState = true;
+      this.handleDeathAnimation();
     } else {
-        this.handleHurtAnimation();
+      this.handleHurtAnimation();
     }
-}
+  }
 
-  isHurt(){
+  isHurt() {
     let timePassed = new Date().getTime() - this.lastHit;
     timePassed = timePassed / 1000;
     return timePassed < 1;

@@ -1,9 +1,12 @@
 class World {
+  keyboard = new Keyboard();
   character = new Character();
-  level = level1;
+  level = level1;f
   canvas;
   ctx;
   camera_x;
+  statusBar = new StatusBar();
+  throwableObjects = [];
 
   constructor(canvas) {
     this.ctx = canvas.getContext("2d");
@@ -11,31 +14,50 @@ class World {
     this.setWorld();
     this.draw = this.draw.bind(this);
     this.draw();
-    this.checkCollisions();
+    this.run();
   }
 
   setWorld() {
     this.character.world = this;
   }
 
-  checkCollisions(){
+  run(){
     setInterval(() => {
+      this.checkCollisions();
+      this.checkThrowobject();
+    }, 200);
+  }
+
+  checkThrowobject() {
+    if (this.keyboard.D) {
+      let axe = new ThrowableObject(this.character.x, this.character.y)
+      this.throwableObjects.push(axe);
+    }
+  }
+
+  checkCollisions(){
       this.level.enemies.forEach((enemy) => {
         if (this.character.isColliding(enemy)) {
           this.character.hit();
-          console.log("collision with Character", this.character.energy);
+          this.statusBar.setPercentage(this.character.energy)
         }
       });
-    }, 200);
   }
 
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.translate(this.camera_x, 0);
     this.addObjectsToMap(this.level.backgroundObjects);
+
+    this.ctx.translate(-this.camera_x, 0);
+    this.addToMap(this.statusBar);
+    this.ctx.translate(this.camera_x, 0);
+
     this.character.draw(this.ctx);
     this.addObjectsToMap(this.level.bats);
     this.addObjectsToMap(this.level.enemies);
+    this.addObjectsToMap(this.throwableObjects);
+
     this.ctx.translate(-this.camera_x, 0);
     requestAnimationFrame(this.draw);
   }

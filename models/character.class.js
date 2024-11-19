@@ -3,7 +3,6 @@ class Character extends MovableObject {
   y = 75;
   height = 150;
   width = 75;
-  currentImg = 0;
   animationSpeed = 30;
   walkingSpeed = 15;
   currentAnimation = null;
