@@ -35,12 +35,12 @@ class ThrowableObject extends MovableObject {
           if (this.isColliding(object)) {
             if (object instanceof Endboss) {
                 console.log(object);
-              object.hit(); // Reduce Endboss energy
+              object.hit();
               console.log("endboss was hit");
               
             } else {
                 console.log(object);
-              object.remove(); // Remove smaller enemies like slimes and bats
+              object.remove();
             }
           }
         });

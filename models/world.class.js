@@ -62,22 +62,21 @@ class World {
 
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.save();
     this.ctx.translate(this.camera_x, 0);
     this.addObjectsToMap(this.level.backgroundObjects);
-  
+    this.addObjectsToMap(this.level.coins);
     this.character.draw(this.ctx);
     this.addObjectsToMap(this.level.bats);
     this.addObjectsToMap(this.level.slimes);
     this.addToMap(this.endboss);
     this.addObjectsToMap(this.throwableObjects);
-  
     this.ctx.translate(-this.camera_x, 0);
     this.addToMap(this.statusBar);
-    this.ctx.translate(this.camera_x, 0);
-  
-    this.ctx.translate(-this.camera_x, 0);
-    requestAnimationFrame(this.draw);
-  }
+    this.ctx.restore();
+    requestAnimationFrame(this.draw.bind(this));
+}
+
 
   addObjectsToMap(objects) {
     objects.forEach((o) => this.addToMap(o));
