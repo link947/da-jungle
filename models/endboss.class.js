@@ -57,6 +57,7 @@ class Endboss extends MovableObject {
   ];
 
   activateAudio = new Audio("audio/activate.mp3");
+  deathAudio = new Audio("audio/golem-death.wav");
 
 
   constructor() {
@@ -105,6 +106,7 @@ class Endboss extends MovableObject {
       if (this.currentAnimation) return;
       
       if (this.status === "dead") {
+        this.deathAudio.play();
         this.currentAnimation = this.playAnimationOnce(this.IMAGES_DEATH, () => {
           this.status = "defeated";
           this.currentAnimation = null;

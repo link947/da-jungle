@@ -7,7 +7,7 @@ class ThrowableObject extends MovableObject {
   ];
 
   throwAudio = new Audio("audio/whoosh.wav");
-  hitAudio = new Audio("audio/hit.wav");
+  
 
   constructor(x, y) {
     super().loadImage("img/6_salsa_bottle/ThrowingAxe01.png");
@@ -38,12 +38,13 @@ class ThrowableObject extends MovableObject {
     objects.forEach((object) => {
       if (this.isColliding(object)) {
         if (object instanceof Endboss) {
-          this.hitAudio.play();
           object.hit();
-          console.log("endboss was hit");
+          let hitAudio = new Audio("audio/hit.wav");
+          hitAudio.play();
         } else {
-          this.hitAudio.play();
           object.remove();
+          let hitAudio = new Audio("audio/hit.wav");
+          hitAudio.play();
         }
       }
     });

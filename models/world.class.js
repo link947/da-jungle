@@ -13,9 +13,6 @@ class World {
   axeCounter = new AxeCounter();
   throwableObjects = [];
 
-  coinAudio = new Audio("audio/coin.wav");
-  axeAudio = new Audio("audio/pickup.wav");
-
   constructor(canvas) {
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
@@ -41,7 +38,11 @@ class World {
   }
 
   checkThrowobject() {
-    if (this.keyboard.D && !this.isThrowingCooldown && this.axeCounter.axeCount > 0) {
+    if (
+      this.keyboard.D &&
+      !this.isThrowingCooldown &&
+      this.axeCounter.axeCount > 0
+    ) {
       let axe = new ThrowableObject(this.character.x, this.character.y);
       this.throwableObjects.push(axe);
 
@@ -53,8 +54,7 @@ class World {
         this.isThrowingCooldown = false;
       }, 1000);
     }
-}
-
+  }
 
   checkCollisions() {
     const collidableObjects = [
@@ -72,15 +72,19 @@ class World {
 
     this.level.coins.forEach((coin, index) => {
       if (this.character.isColliding(coin)) {
-        this.coinAudio.play();
+        const coinSound = new Audio("audio/coin.wav");
+        coinSound.play();
+    
         this.coinCounter.increaseCoins();
         this.level.coins.splice(index, 1);
       }
     });
-
+    
     this.level.fallingAxes.forEach((axe, index) => {
       if (this.character.isColliding(axe)) {
-        this.axeAudio.play();
+        const axeSound = new Audio("audio/pickup.wav");
+        axeSound.play();
+    
         this.axeCounter.increaseAxeCount();
         this.level.fallingAxes.splice(index, 1);
       }
@@ -104,7 +108,7 @@ class World {
     this.coinCounter.render(this.ctx);
     this.axeCounter.render(this.ctx);
     this.ctx.restore();
-    requestAnimationFrame(this.draw.bind(this))
+    requestAnimationFrame(this.draw.bind(this));
   }
 
   addObjectsToMap(objects) {
