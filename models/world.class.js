@@ -9,6 +9,7 @@ class World {
   ctx;
   camera_x;
   statusBar = new StatusBar();
+  coinCounter = new CoinCounter();
   throwableObjects = [];
 
   constructor(canvas) {
@@ -49,16 +50,26 @@ class World {
   }
 
   checkCollisions() {
-    const collidableObjects = [...this.level.slimes, ...this.level.bats,  this.endboss];
-  
+    const collidableObjects = [
+      ...this.level.slimes,
+      ...this.level.bats,
+      this.endboss,
+    ];
+
     collidableObjects.forEach((object) => {
       if (this.character.isColliding(object)) {
-          this.character.hit();
-          this.statusBar.setPercentage(this.character.energy);
+        this.character.hit();
+        this.statusBar.setPercentage(this.character.energy);
+      }
+    });
+
+    this.level.coins.forEach((coin, index) => {
+      if (this.character.isColliding(coin)) {
+        this.coinCounter.increaseCoins();
+        this.level.coins.splice(index, 1);
       }
     });
   }
-  
 
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -73,10 +84,11 @@ class World {
     this.addObjectsToMap(this.throwableObjects);
     this.ctx.translate(-this.camera_x, 0);
     this.addToMap(this.statusBar);
+    this.coinCounter.render(this.ctx);
     this.ctx.restore();
-    requestAnimationFrame(this.draw.bind(this));
-}
-
+    requestAnimationFrame(this.draw.bind(this))
+  }
+  
 
   addObjectsToMap(objects) {
     objects.forEach((o) => this.addToMap(o));
