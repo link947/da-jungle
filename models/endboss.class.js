@@ -58,6 +58,8 @@ class Endboss extends MovableObject {
 
   activateAudio = new Audio("audio/activate.mp3");
   deathAudio = new Audio("audio/golem-death.wav");
+  music = new Audio("audio/music.wav");
+  
 
 
   constructor() {
@@ -111,9 +113,11 @@ class Endboss extends MovableObject {
           this.status = "defeated";
           this.currentAnimation = null;
         });
+        this.music.pause();
       } else if (this.status === "activate") {
         this.activateAudio.play();
         this.currentAnimation = this.playAnimationOnce(this.IMAGES_ACTIVATE, () => {
+          this.music.play();
           this.status = "new_idle";
           this.currentAnimation = null;
         });
