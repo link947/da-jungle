@@ -2,7 +2,6 @@ class Slime extends MovableObject {
   y = 357;
   height = 80;
   width = 80;
-  currentImage = 0;
   IMAGES_WALKING = [
     "img/enemie_slime/slime_run-1.png",
     "img/enemie_slime/slime_run-2.png",
@@ -10,14 +9,13 @@ class Slime extends MovableObject {
     "img/enemie_slime/slime_run-4.png",
   ];
 
-  constructor() {
+  constructor(x, speed) {
     super();
     this.loadImage("img/enemie_slime/slime_run-1.png");
-    this.x = 200 + Math.random() * 500;
+    this.x = x;
+    this.speed = speed;
     this.loadImages(this.IMAGES_WALKING);
-    this.speed = 0.15 + Math.random() * 0.5;
     this.animate();
-    
   }
 
   animate() {
@@ -28,5 +26,12 @@ class Slime extends MovableObject {
     setInterval(() => {
       this.playAnimation(this.IMAGES_WALKING);
     }, 100);
+  }
+
+  remove() {
+    const index = level1.slimes.indexOf(this);
+    if (index > -1) {
+      level1.slimes.splice(index, 1);
+    }
   }
 }

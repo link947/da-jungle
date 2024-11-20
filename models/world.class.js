@@ -1,7 +1,10 @@
 class World {
   keyboard = new Keyboard();
   character = new Character();
-  level = level1;f
+  endboss = new Endboss();
+  slime = new Slime();
+  level = level1;
+  f;
   canvas;
   ctx;
   camera_x;
@@ -15,49 +18,63 @@ class World {
     this.draw = this.draw.bind(this);
     this.draw();
     this.run();
+    this.isThrowingCooldown = false;
   }
 
   setWorld() {
     this.character.world = this;
   }
 
-  run(){
+  run() {
     setInterval(() => {
       this.checkCollisions();
       this.checkThrowobject();
+      this.throwableObjects.forEach((axe) => {
+        axe.checkHit([...this.level.slimes, ...this.level.bats, this.endboss]);
+      });
     }, 200);
   }
 
   checkThrowobject() {
-    if (this.keyboard.D) {
-      let axe = new ThrowableObject(this.character.x, this.character.y)
+    if (this.keyboard.D && !this.isThrowingCooldown) {
+      let axe = new ThrowableObject(this.character.x, this.character.y);
       this.throwableObjects.push(axe);
+
+      this.isThrowingCooldown = true;
+
+      setTimeout(() => {
+        this.isThrowingCooldown = false;
+      }, 1000);
     }
   }
 
-  checkCollisions(){
-      this.level.enemies.forEach((enemy) => {
-        if (this.character.isColliding(enemy)) {
+  checkCollisions() {
+    const collidableObjects = [...this.level.slimes, ...this.level.bats,  this.endboss];
+  
+    collidableObjects.forEach((object) => {
+      if (this.character.isColliding(object)) {
           this.character.hit();
-          this.statusBar.setPercentage(this.character.energy)
-        }
-      });
+          this.statusBar.setPercentage(this.character.energy);
+      }
+    });
   }
+  
 
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.translate(this.camera_x, 0);
     this.addObjectsToMap(this.level.backgroundObjects);
-
+  
+    this.character.draw(this.ctx);
+    this.addObjectsToMap(this.level.bats);
+    this.addObjectsToMap(this.level.slimes);
+    this.addToMap(this.endboss);
+    this.addObjectsToMap(this.throwableObjects);
+  
     this.ctx.translate(-this.camera_x, 0);
     this.addToMap(this.statusBar);
     this.ctx.translate(this.camera_x, 0);
-
-    this.character.draw(this.ctx);
-    this.addObjectsToMap(this.level.bats);
-    this.addObjectsToMap(this.level.enemies);
-    this.addObjectsToMap(this.throwableObjects);
-
+  
     this.ctx.translate(-this.camera_x, 0);
     requestAnimationFrame(this.draw);
   }
@@ -70,7 +87,6 @@ class World {
     if (mo.img) {
       this.ctx.imageSmoothingEnabled = false;
       mo.draw(this.ctx);
-      mo.drawFrame(this.ctx);
     }
   }
 }

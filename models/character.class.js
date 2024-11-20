@@ -84,7 +84,7 @@ class Character extends MovableObject {
       if (this.isHurt() && !this.isHurtState) {
         this.hurtSound.play();
         this.handleHurtAnimation();
-        return; // Ensure no other animations are triggered while hurt
+        return;
       }
 
       this.walkingSound.pause();
@@ -236,8 +236,6 @@ class Character extends MovableObject {
       } else {
         ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
       }
-
-      this.drawFrame(ctx);
     }
 
     ctx.restore();
