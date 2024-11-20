@@ -13,6 +13,9 @@ class World {
   axeCounter = new AxeCounter();
   throwableObjects = [];
 
+  coinAudio = new Audio("audio/coin.wav");
+  axeAudio = new Audio("audio/pickup.wav");
+
   constructor(canvas) {
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
@@ -69,6 +72,7 @@ class World {
 
     this.level.coins.forEach((coin, index) => {
       if (this.character.isColliding(coin)) {
+        this.coinAudio.play();
         this.coinCounter.increaseCoins();
         this.level.coins.splice(index, 1);
       }
@@ -76,6 +80,7 @@ class World {
 
     this.level.fallingAxes.forEach((axe, index) => {
       if (this.character.isColliding(axe)) {
+        this.axeAudio.play();
         this.axeCounter.increaseAxeCount();
         this.level.fallingAxes.splice(index, 1);
       }
@@ -97,7 +102,7 @@ class World {
     this.ctx.translate(-this.camera_x, 0);
     this.addToMap(this.statusBar);
     this.coinCounter.render(this.ctx);
-    this.axeCounter.render(this.ctx);  // Ensure the axe counter is rendered
+    this.axeCounter.render(this.ctx);
     this.ctx.restore();
     requestAnimationFrame(this.draw.bind(this))
   }

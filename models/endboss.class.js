@@ -56,6 +56,9 @@ class Endboss extends MovableObject {
     "img/golem/gole_hit-5.png",
   ];
 
+  activateAudio = new Audio("audio/activate.mp3");
+
+
   constructor() {
     super().loadImage(this.IMAGES_IDLE[0]);
     this.loadImages(this.IMAGES_HIT);
@@ -100,13 +103,14 @@ class Endboss extends MovableObject {
     let moveDirection = -1;
     setInterval(() => {
       if (this.currentAnimation) return;
-  
+      
       if (this.status === "dead") {
         this.currentAnimation = this.playAnimationOnce(this.IMAGES_DEATH, () => {
           this.status = "defeated";
           this.currentAnimation = null;
         });
       } else if (this.status === "activate") {
+        this.activateAudio.play();
         this.currentAnimation = this.playAnimationOnce(this.IMAGES_ACTIVATE, () => {
           this.status = "new_idle";
           this.currentAnimation = null;
@@ -133,7 +137,7 @@ class Endboss extends MovableObject {
     if (this.status === "dead" || this.status === "defeated" || this.status === "activate") return;
 
     this.playAnimation(this.IMAGES_HIT);
-    this.energy -= 10;
+    this.energy -= 17;
     
     if (this.energy <= 0) {
       this.energy = 0;
