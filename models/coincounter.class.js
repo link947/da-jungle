@@ -20,9 +20,9 @@ class CoinCounter extends DrawableObject {
     ctx.font = "26px Pixelify Sans";
     ctx.lineWidth = 4;
     ctx.strokeStyle = "black";
-    ctx.strokeText(this.coinCount, this.x + this.width + 8, this.y + this.height / 2 + 9);
+    ctx.strokeText(this.coinCount, this.x + this.width + 5, this.y + this.height / 2 + 8);
     ctx.fillStyle = "white";
-    ctx.fillText(this.coinCount, this.x + this.width + 8, this.y + this.height / 2 + 9);
+    ctx.fillText(this.coinCount, this.x + this.width + 5, this.y + this.height / 2 + 8);
   }
   
 }

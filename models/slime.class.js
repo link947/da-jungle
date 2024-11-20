@@ -29,6 +29,8 @@ class Slime extends MovableObject {
   }
 
   remove() {
+    let coin = new Coins(this.x);
+    level1.coins.push(coin);
     const index = level1.slimes.indexOf(this);
     if (index > -1) {
       level1.slimes.splice(index, 1);

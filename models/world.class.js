@@ -10,6 +10,7 @@ class World {
   camera_x;
   statusBar = new StatusBar();
   coinCounter = new CoinCounter();
+  axeCounter = new AxeCounter();
   throwableObjects = [];
 
   constructor(canvas) {
@@ -37,9 +38,11 @@ class World {
   }
 
   checkThrowobject() {
-    if (this.keyboard.D && !this.isThrowingCooldown) {
+    if (this.keyboard.D && !this.isThrowingCooldown && this.axeCounter.axeCount > 0) {
       let axe = new ThrowableObject(this.character.x, this.character.y);
       this.throwableObjects.push(axe);
+
+      this.axeCounter.decreaseAxeCount();
 
       this.isThrowingCooldown = true;
 
@@ -47,7 +50,8 @@ class World {
         this.isThrowingCooldown = false;
       }, 1000);
     }
-  }
+}
+
 
   checkCollisions() {
     const collidableObjects = [
@@ -69,6 +73,13 @@ class World {
         this.level.coins.splice(index, 1);
       }
     });
+
+    this.level.fallingAxes.forEach((axe, index) => {
+      if (this.character.isColliding(axe)) {
+        this.axeCounter.increaseAxeCount();
+        this.level.fallingAxes.splice(index, 1);
+      }
+    });
   }
 
   draw() {
@@ -77,6 +88,7 @@ class World {
     this.ctx.translate(this.camera_x, 0);
     this.addObjectsToMap(this.level.backgroundObjects);
     this.addObjectsToMap(this.level.coins);
+    this.addObjectsToMap(this.level.fallingAxes);
     this.character.draw(this.ctx);
     this.addObjectsToMap(this.level.bats);
     this.addObjectsToMap(this.level.slimes);
@@ -85,10 +97,10 @@ class World {
     this.ctx.translate(-this.camera_x, 0);
     this.addToMap(this.statusBar);
     this.coinCounter.render(this.ctx);
+    this.axeCounter.render(this.ctx);  // Ensure the axe counter is rendered
     this.ctx.restore();
     requestAnimationFrame(this.draw.bind(this))
   }
-  
 
   addObjectsToMap(objects) {
     objects.forEach((o) => this.addToMap(o));
